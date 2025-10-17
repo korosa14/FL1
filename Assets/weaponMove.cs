@@ -5,7 +5,7 @@ using UnityEngine;
 public class SwordSwing : MonoBehaviour
 {
     [Header("Swing settings")]
-    public KeyCode swingKey = KeyCode.Space; // 振るボタン
+    public KeyCode swingKey = KeyCode.F; // 振るボタン
     public float preWindTime = 0.05f;        // 溜め（任意）
     public float swingDuration = 0.20f;      // 振り下ろし時間
     public float recoverDuration = 0.12f;    // もとに戻る時間
