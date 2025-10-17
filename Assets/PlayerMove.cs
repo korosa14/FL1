@@ -23,6 +23,14 @@ public class PlayerMove : MonoBehaviour
     private float currentSpeed;
     private bool canJump = false;    // 地面接触時のみジャンプ可能
 
+
+
+
+    void Start()
+    {
+        
+    }
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -80,10 +88,15 @@ public class PlayerMove : MonoBehaviour
         Vector2 origin = new Vector2(bounds.center.x, bounds.min.y);
         RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, groundCheckDistance, groundLayer);
 
+
         // デバッグ可視化（シーンビューで確認できる）
         Debug.DrawRay(origin, Vector2.down * groundCheckDistance, hit.collider ? Color.green : Color.red);
 
         return hit.collider != null;
     }
-}
 
+
+        
+ }
+
+  
