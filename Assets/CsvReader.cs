@@ -1,44 +1,58 @@
 using UnityEngine;
+
+using UnityEngine.Tilemaps;
+
+
 using System.IO;
 
 public class CsvReader : MonoBehaviour
 {
-    // CSVファイルをアタッチするための変数
-    public TextAsset csvFile;
-    public const int wide=10;
-    public const int high=10;
-    
-    public GameObject tile;
+   public Tilemap targetTilemap; // タイルを配置するTilemap
+    public Tile[] tilePalette;   // CSVの数値に対応するタイルの配列
+    public string csvFileName = ""; // Resourcesフォルダ内のCSVファイル名
+
     void Start()
     {
-        if (csvFile != null)
-        {
-            // CSVファイルを文字列として取得
-            string csvText = csvFile.text;
-            
-            // 行ごとに分割
-            string[] lines = csvText.Split('\n');
-
-            int xLine=0;
-            int yLine=0;
-
-            foreach (string line in lines)
-            {
-                // カンマで列を分割
-                string[] cells = line.Split(',');
-                
-                // データを利用
-                foreach (string cell in cells)
-                {
-                    Debug.Log(cell.Trim()); // 前後の空白を削除して表示
-                    Vector3 position = new Vector3(xLine, yLine);
-                    Instantiate(tile, position, Quaternion.identity);
-                    xLine++;
-                }
-                xLine=0;
-                yLine++;
-            }
-        }
+        LoadMapFromCsv();
     }
 
+    void LoadMapFromCsv()
+    {
+        // ResourcesフォルダからCSVファイルをTextAssetとして読み込む
+        TextAsset csvFile = Resources.Load<TextAsset>(csvFileName);
+
+        if (csvFile == null)
+        {
+            Debug.LogError("CSVファイルが見つかりませんでした: " + csvFileName);
+            return;
+        }
+
+        string[] lines = csvFile.text.Split('\n');
+        
+        // 縦方向のループ（行）
+        for (int y = 0; y < lines.Length; y++)
+        {
+            string line = lines[y];
+            if (string.IsNullOrWhiteSpace(line)) continue;
+
+            string[] values = line.Split(',');
+            
+            // 横方向のループ（列）
+            for (int x = 0; x < values.Length; x++)
+            {
+                if (int.TryParse(values[x].Trim(), out int tileId))
+                {
+                    // tileIdがtilePaletteの範囲内にあるか確認
+                    if (tileId >= 0 && tileId < tilePalette.Length)
+                    {
+                        Tile tileToPlace = tilePalette[tileId];
+                        // 座標を計算し、Tilemapにタイルをセット
+                        // CSVの並びとUnityの座標系を合わせるためy座標を反転させる
+                        targetTilemap.SetTile(new Vector3Int(x, lines.Length - 1 - y, 0), tileToPlace);
+                    }
+                }
+            }
+        }
+        Debug.Log("CSVからのマップロードが完了しました。");
+    }
 }
