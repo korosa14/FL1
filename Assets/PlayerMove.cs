@@ -11,20 +11,17 @@ public class PlayerMove : MonoBehaviour
     public float slowSpeed = 2f;     // スロー速度
 
     [Header("ジャンプ設定")]
-    public float jumpForce = 10f;     // ジャンプ力
+    public float jumpForce = 10f;    // ジャンプ力
 
     [Header("地面判定")]
     public LayerMask groundLayer;    // 地面専用レイヤー
+    public float groundCheckDistance = 0.1f; // 判定距離（少し短く）
 
     private Rigidbody2D rb;
     private BoxCollider2D boxCollider;
     private float moveInput;         // 左右入力
     private float currentSpeed;
     private bool canJump = false;    // 地面接触時のみジャンプ可能
-    void Start()
-    {
-        
-    }
 
     private void Awake()
     {
@@ -52,11 +49,14 @@ public class PlayerMove : MonoBehaviour
         else
             currentSpeed = normalSpeed;
 
+        // 接地判定を更新
+        canJump = IsGrounded();
+
         // ジャンプ
         if (Keyboard.current.spaceKey.wasPressedThisFrame && canJump)
         {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f); // 安定ジャンプ
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
-            canJump = false; // ジャンプ直後は空中扱い
         }
     }
 
@@ -64,25 +64,26 @@ public class PlayerMove : MonoBehaviour
     {
         // X方向移動のみ velocity に反映、Y方向はジャンプに任せる
         Vector2 vel = rb.linearVelocity;
-        vel.x = moveInput * currentSpeed;
+        float targetX = moveInput * currentSpeed;
+
+        //徐々に速度を近づける
+        vel.x = Mathf.Lerp(vel.x, targetX, 0.15f);
         rb.linearVelocity = vel;
     }
 
-    // 地面に接触した瞬間にジャンプ可能
-    private void OnCollisionEnter2D(Collision2D collision)
+    /// <summary>
+    /// 接地判定（Raycast方式）
+    /// </summary>
+    private bool IsGrounded()
     {
-        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
-        {
-            canJump = true;
-        }
-    }
+        Bounds bounds = boxCollider.bounds;
+        Vector2 origin = new Vector2(bounds.center.x, bounds.min.y);
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, groundCheckDistance, groundLayer);
 
-    // 地面から離れた瞬間にジャンプ不可
-    private void OnCollisionExit2D(Collision2D collision)
-    {
-        if (((1 << collision.gameObject.layer) & groundLayer) != 0)
-        {
-            canJump = false;
-        }
+        // デバッグ可視化（シーンビューで確認できる）
+        Debug.DrawRay(origin, Vector2.down * groundCheckDistance, hit.collider ? Color.green : Color.red);
+
+        return hit.collider != null;
     }
 }
+
