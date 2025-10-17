@@ -274,7 +274,7 @@ MonoBehaviour:
   targetTilemap: {fileID: 298516667}
   tilePalette:
   - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 11400000, guid: bdbf5dba86d31f04ba1fe1703083d55a, type: 2}
   csvFileName: all_ones_20x200
 --- !u!4 &1040507487
 Transform:
