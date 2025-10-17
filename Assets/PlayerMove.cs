@@ -23,6 +23,9 @@ public class PlayerMove : MonoBehaviour
     private float currentSpeed;
     private bool canJump = false;    // 地面接触時のみジャンプ可能
 
+
+    private bool facingRight = true;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -58,6 +61,12 @@ public class PlayerMove : MonoBehaviour
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f); // 安定ジャンプ
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         }
+
+        // 向き反転
+        if (moveInput > 0 && !facingRight)
+            Flip();
+        else if (moveInput < 0 && facingRight)
+            Flip();
     }
 
     void FixedUpdate()
@@ -84,6 +93,14 @@ public class PlayerMove : MonoBehaviour
         Debug.DrawRay(origin, Vector2.down * groundCheckDistance, hit.collider ? Color.green : Color.red);
 
         return hit.collider != null;
+    }
+
+    private void Flip()
+    {
+        facingRight = !facingRight;
+        Vector3 scale = transform.localScale;
+        scale.x *= -1;
+        transform.localScale = scale;
     }
 }
 
