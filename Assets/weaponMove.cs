@@ -9,7 +9,7 @@ public class SwordSwing : MonoBehaviour
     public float preWindTime = 0.05f;        // —­‚ßi”CˆÓj
     public float swingDuration = 0.20f;      // U‚è‰º‚ë‚µŠÔ
     public float recoverDuration = 0.12f;    // ‚à‚Æ‚É–ß‚éŠÔ
-    public float swingAngle = 100f;          // U‚ê‚éŠp“xidegj
+    public float swingAngle = 200f;          // U‚ê‚éŠp“xidegj
     public AnimationCurve swingCurve = AnimationCurve.EaseInOut(0, 0, 1, 1);
 
     [Header("Behavior")]
