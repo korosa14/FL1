@@ -7,7 +7,8 @@ public class CsvReader : MonoBehaviour
     public TextAsset csvFile;
     public const int wide=10;
     public const int high=10;
-    int[,] map = new int [high,wide];
+    
+    public GameObject tile;
     void Start()
     {
         if (csvFile != null)
@@ -30,7 +31,8 @@ public class CsvReader : MonoBehaviour
                 foreach (string cell in cells)
                 {
                     Debug.Log(cell.Trim()); // 前後の空白を削除して表示
-                    map[yLine,xLine]=int.Parse(cell);
+                    Vector3 position = new Vector3(xLine, yLine);
+                    Instantiate(tile, position, Quaternion.identity);
                     xLine++;
                 }
                 xLine=0;
