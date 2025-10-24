@@ -985,8 +985,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackKey: 106
-  swingAngle: 200
-  swingDuration: 0.2
+  startAngle: 90
+  endAngle: -60
+  swingDuration: 0.15
+  returnDuration: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
