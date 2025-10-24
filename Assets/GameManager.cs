@@ -4,7 +4,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("Prefab 参照")]
     
-    public GameObject player; // プレイヤー
+    public PlayerMove player; // プレイヤー
 
     
 
@@ -21,6 +21,14 @@ public class GameManager : MonoBehaviour
         if (player != null)
         {
             player.transform.position = new Vector2(2, 10);
+        }
+    }
+
+    private void Update()
+    {
+        if (player.GetdethFlag())
+        {
+
         }
     }
 }
