@@ -71,6 +71,8 @@ public class PlayerMove : MonoBehaviour
             Flip();
         else if (moveInput < 0 && facingRight)
             Flip();
+
+        IsDeath();
     }
 
     void FixedUpdate()
@@ -115,6 +117,14 @@ public class PlayerMove : MonoBehaviour
     public bool GetdethFlag()
     {
         return dethFlag;
+    }
+
+    private void IsDeath()
+    {
+        if (HP <= 0)
+        {
+            dethFlag = true;
+        }
     }
 }
 
