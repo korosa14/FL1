@@ -26,6 +26,10 @@ public class PlayerMove : MonoBehaviour
 
     private bool facingRight = true;
 
+    [SerializeField] private int HP = 20;
+
+    [SerializeField] private bool dethFlag=false;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -67,6 +71,8 @@ public class PlayerMove : MonoBehaviour
             Flip();
         else if (moveInput < 0 && facingRight)
             Flip();
+
+        IsDeath();
     }
 
     void FixedUpdate()
@@ -101,6 +107,24 @@ public class PlayerMove : MonoBehaviour
         Vector3 scale = transform.localScale;
         scale.x *= -1;
         transform.localScale = scale;
+    }
+
+    public int GetHP()
+    {
+        return HP;
+    }
+
+    public bool GetdethFlag()
+    {
+        return dethFlag;
+    }
+
+    private void IsDeath()
+    {
+        if (HP <= 0)
+        {
+            dethFlag = true;
+        }
     }
 }
 

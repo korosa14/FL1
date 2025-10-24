@@ -4,7 +4,7 @@ public class GameManager : MonoBehaviour
 {
     [Header("Prefab 参照")]
     
-    public GameObject player; // プレイヤー
+    public PlayerMove player; // プレイヤー
 
     
 
@@ -20,7 +20,12 @@ public class GameManager : MonoBehaviour
         // プレイヤー初期位置設定（地面の上）
         if (player != null)
         {
-            player.transform.position = new Vector2(2, 10);
+            player.transform.position = new Vector2(10, 10);
         }
+    }
+
+    private void Update()
+    {
+        
     }
 }
