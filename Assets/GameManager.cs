@@ -20,6 +20,7 @@ public class GameManager : MonoBehaviour
         // プレイヤー初期位置設定（地面の上）
         if (player != null)
         {
+            //PlayerMove newplayer = Instantiate(player,new Vector3(10,10,0),Quaternion.identity);
             player.transform.position = new Vector2(10, 10);
         }
     }

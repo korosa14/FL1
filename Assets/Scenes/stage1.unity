@@ -460,7 +460,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff63bb9c43f8ec54eaa9e4de1c4bd2d9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 124617487}
+  player: {fileID: 124617492}
 --- !u!4 &654654600
 Transform:
   m_ObjectHideFlags: 0
@@ -493,6 +493,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 11400000, guid: 6b15bc1d772641c408c75df3940ad59e, type: 2}
   csvFileName: flat
+  enemy1: {fileID: 0}
 --- !u!1 &760062362
 GameObject:
   m_ObjectHideFlags: 0
@@ -987,8 +988,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   attackKey: 106
-  swingAngle: 500
+  startAngle: 90
+  endAngle: -45
   swingDuration: 0.2
+  returnDuration: 0.1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

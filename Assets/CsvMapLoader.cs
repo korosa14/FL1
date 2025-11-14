@@ -8,6 +8,8 @@ public class CsvMapLoader : MonoBehaviour
     public Tile[] tilePalette;   // CSVの数値に対応するタイルの配列
     public string csvFileName = ""; // Resourcesフォルダ内のCSVファイル名
 
+    public GameObject enemy1;
+
     void Start()
     {
         LoadMapFromCsv();
@@ -40,12 +42,15 @@ public class CsvMapLoader : MonoBehaviour
                 if (int.TryParse(values[x].Trim(), out int tileId))
                 {
                     // tileIdがtilePaletteの範囲内にあるか確認
-                    if (tileId >= 0 && tileId < tilePalette.Length)
+                    if (tileId == 1 && tileId < tilePalette.Length)
                     {
                         Tile tileToPlace = tilePalette[tileId];
                         // 座標を計算し、Tilemapにタイルをセット
                         // CSVの並びとUnityの座標系を合わせるためy座標を反転させる
                         targetTilemap.SetTile(new Vector3Int(x, lines.Length - 1 - y, 0), tileToPlace);
+                    }else if (tileId == 2)
+                    {
+                        GameObject newObject = Instantiate(enemy1, new Vector3(x, lines.Length - 1 - y, 0), Quaternion.identity);
                     }
                 }
             }
