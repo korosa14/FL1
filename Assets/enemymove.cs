@@ -2,55 +2,83 @@ using UnityEngine;
 
 public class enemymove : MonoBehaviour
 {
-    // �v���C���[��Transform��Inspector����ݒ�
-    public GameObject player;
+    // === 公開設定 ===
+    [Header("追跡対象")]
+    public Transform player; // プレイヤーのTransformコンポーネント
 
-    // �G�̈ړ����x
-    public float moveSpeed = 5f;
+    [Header("移動設定")]
+    public float moveSpeed = 3f; // 移動速度
+    public float jumpForce = 8f; // ジャンプ力
+    public float distanceToJump = 2f; // ジャンプする距離
 
-    // �W�����v�̗�
-    public float jumpForce = 8f;
+    [Header("地面判定")]
+    public LayerMask groundLayer;    // 地面専用レイヤー
+    public float groundCheckDistance = 0.1f; // 判定距離（少し短く）
 
-    // ���̃W�����v�܂ł̑ҋ@����
-    public float jumpInterval = 2f;
-
-    // �ڒn����̂��߂̕ϐ�
-    public LayerMask groundLayer;
-    public Transform groundCheck;
-    private bool isGrounded;
-
+    // === プライベート変数 ===
     private Rigidbody2D rb;
-    private float nextJumpTime;
+    private bool isGrounded;
+    private float direction;
+    private BoxCollider2D boxCollider;
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        nextJumpTime = Time.time + jumpInterval;
+        // ヒエラルキーから"Player"タグのオブジェクトを探してplayer変数に設定
+        if (player == null)
+        {
+            GameObject playerObject = GameObject.FindWithTag("Player");
+            if (playerObject != null)
+            {
+                player = playerObject.transform;
+            }
+        }
+
+        boxCollider = GetComponent<BoxCollider2D>();
     }
 
     void Update()
     {
-        // �ڒn����
-        isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        // プレイヤーが存在しない場合は処理を終了
+        if (player == null)
+        {
+            return;
+        }
 
-        // �W�����v�̃^�C�~���O���`�F�b�N
-        if (isGrounded && Time.time >= nextJumpTime)
+        // プレイヤーとの水平方向の距離を計算
+        float distanceX = player.position.x - transform.position.x;
+        direction = Mathf.Sign(distanceX);
+
+        // 敵とプレイヤーが一定距離離れていて、かつ地面に接している場合にジャンプ
+        if (Mathf.Abs(distanceX) > distanceToJump && isGrounded)
         {
             JumpTowardsPlayer();
-            nextJumpTime = Time.time + jumpInterval;
         }
     }
 
+    void FixedUpdate()
+    {
+        // 地面チェック（レイキャストを使用）
+        isGrounded = IsGrounded();
+
+        // プレイヤーの方向へ移動
+        rb.velocity = new Vector2(direction * moveSpeed, rb.velocity.y);
+    }
+
+    // プレイヤーに向かってジャンプするメソッド
     void JumpTowardsPlayer()
     {
-        // �v���C���[�̕������v�Z
-        Vector2 direction = (player.transform.position - transform.position).normalized;
+        rb.AddForce(new Vector2(direction * moveSpeed, jumpForce), ForceMode2D.Impulse);
+    }
+    private bool IsGrounded()
+    {
+        Bounds bounds = boxCollider.bounds;
+        Vector2 origin = new Vector2(bounds.center.x, bounds.min.y);
+        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, groundCheckDistance, groundLayer);
 
-        // X�����̑��x��ݒ�
-        float horizontalVelocity = direction.x * moveSpeed;
+        // デバッグ可視化（シーンビューで確認できる）
+        Debug.DrawRay(origin, Vector2.down * groundCheckDistance, hit.collider ? Color.green : Color.red);
 
-        // �W�����v�̗͂�������
-        Vector2 jumpVelocity = new Vector2(horizontalVelocity, jumpForce);
-        rb.linearVelocity = jumpVelocity;
+        return hit.collider != null;
     }
 }

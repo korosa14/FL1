@@ -208,10 +208,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  moveSpeed: 5
+  moveSpeed: 1
   jumpForce: 8
-  jumpInterval: 2
+  distanceToJump: 2
   groundLayer:
     serializedVersion: 2
-    m_Bits: 0
-  groundCheck: {fileID: 5304293061286650401}
+    m_Bits: 8
