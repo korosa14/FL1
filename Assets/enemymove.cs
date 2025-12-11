@@ -62,7 +62,7 @@ public class enemymove : MonoBehaviour
         isGrounded = IsGrounded();
 
         // プレイヤーの方向へ移動
-        rb.velocity = new Vector2(direction * moveSpeed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
     }
 
     // プレイヤーに向かってジャンプするメソッド

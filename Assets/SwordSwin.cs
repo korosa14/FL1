@@ -3,18 +3,20 @@ using UnityEngine;
 
 public class SwordSwing : MonoBehaviour
 {
-    [Header("UŒ‚ƒL[")]
+    [Header("ï¿½Uï¿½ï¿½ï¿½Lï¿½[")]
     public KeyCode attackKey = KeyCode.J;
 
-    [Header("UŒ‚İ’è")]
-    public float startAngle = 90f;     // \‚¦‚ÌŠp“xiãj
-    public float endAngle = -45f;      // U‚è‰º‚ë‚·Šp“xi‰ºj
-    public float swingDuration = 0.15f; // U‚é‘¬‚³
-    public float returnDuration = 0.1f; // Œ³‚É–ß‚·‘¬‚³
+    [Header("ï¿½Uï¿½ï¿½ï¿½İ’ï¿½")]
+    public float startAngle = 90f;     // ï¿½\ï¿½ï¿½ï¿½ÌŠpï¿½xï¿½iï¿½ï¿½j
+    public float endAngle = -45f;      // ï¿½Uï¿½è‰ºï¿½ë‚·ï¿½pï¿½xï¿½iï¿½ï¿½ï¿½j
+    public float swingDuration = 0.15f; // ï¿½Uï¿½é‘¬ï¿½ï¿½
+    public float returnDuration = 0.1f; // ï¿½ï¿½ï¿½É–ß‚ï¿½ï¿½ï¿½ï¿½ï¿½
 
     private bool isSwinging = false;
     private Quaternion initialRotation;
     private Collider2D swordCollider;
+
+    public GameObject targetObject;
 
     void Start()
     {
@@ -29,7 +31,13 @@ public class SwordSwing : MonoBehaviour
     {
         if (!isSwinging && Input.GetKeyDown(attackKey))
         {
+            if (targetObject != null)
+        {
+            targetObject.SetActive(true);
+           
+        }
             StartCoroutine(SwingDownRoutine());
+        
         }
     }
 
@@ -37,12 +45,12 @@ public class SwordSwing : MonoBehaviour
     {
         isSwinging = true;
 
-        // ƒRƒ‰ƒCƒ_[ON
+        // ï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[ON
         if (swordCollider != null)
             swordCollider.enabled = true;
 
         float t = 0f;
-        // ã‚©‚ç‰º‚ÖU‚è‰º‚ë‚·
+        // ï¿½ã‚©ï¿½ç‰ºï¿½ÖUï¿½è‰ºï¿½ë‚·
         while (t < swingDuration)
         {
             t += Time.deltaTime;
@@ -52,14 +60,14 @@ public class SwordSwing : MonoBehaviour
             yield return null;
         }
 
-        // ­‚µŠÔ‚ğ’u‚­i“–‚½‚è”»’èˆÛj
+        // ï¿½ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½uï¿½ï¿½ï¿½iï¿½ï¿½ï¿½ï¿½ï¿½è”»ï¿½ï¿½Ûï¿½ï¿½j
         yield return new WaitForSeconds(0.05f);
 
-        // ƒRƒ‰ƒCƒ_[OFF
+        // ï¿½Rï¿½ï¿½ï¿½Cï¿½_ï¿½[OFF
         if (swordCollider != null)
             swordCollider.enabled = false;
 
-        // Œ³‚ÌŠp“x‚É–ß‚·
+        // ï¿½ï¿½ï¿½ÌŠpï¿½xï¿½É–ß‚ï¿½
         t = 0f;
         while (t < returnDuration)
         {
@@ -72,14 +80,8 @@ public class SwordSwing : MonoBehaviour
 
         transform.localRotation = initialRotation;
         isSwinging = false;
+        targetObject.SetActive(false);
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (isSwinging && other.CompareTag("Enemy"))
-        {
-            Debug.Log("Enemy hit: " + other.name);
-            // other.GetComponent<Enemy>()?.TakeDamage(1);
-        }
-    }
+    
 }
