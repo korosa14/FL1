@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class enemymove : MonoBehaviour
 {
@@ -20,6 +21,8 @@ public class enemymove : MonoBehaviour
     private bool isGrounded;
     private float direction;
     private BoxCollider2D boxCollider;
+
+    public UnityEvent onHitEvent;
 
     void Start()
     {

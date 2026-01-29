@@ -40,6 +40,10 @@ public class enemyHP : MonoBehaviour
                 fcool=0;
             }
         }
+
+        if(HP<=0){
+            Destroy(gameObject);
+        }
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -48,8 +52,12 @@ public class enemyHP : MonoBehaviour
         {
             inv=true;
             Debug.Log("Enemy hit: " + other.name);
+            fcool=0;
+            HP--;
         }
     }
+
+    
 }
 
 

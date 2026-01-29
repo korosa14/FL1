@@ -217,6 +217,9 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 8
   groundCheckDistance: 0.1
+  onHitEvent:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &-6015119600701736216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -229,7 +232,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddee11aa429c7ac42a61382afabe046b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HP: 5
+  HP: 4
   cooltime: 5
 --- !u!114 &3188237377897023957
 MonoBehaviour:
