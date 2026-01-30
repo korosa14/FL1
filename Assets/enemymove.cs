@@ -22,7 +22,7 @@ public class enemymove : MonoBehaviour
     private float direction;
     private BoxCollider2D boxCollider;
 
-    public UnityEvent onHitEvent;
+    
 
     void Start()
     {
@@ -52,11 +52,7 @@ public class enemymove : MonoBehaviour
         float distanceX = player.position.x - transform.position.x;
         direction = Mathf.Sign(distanceX);
 
-        // 敵とプレイヤーが一定距離離れていて、かつ地面に接している場合にジャンプ
-        if (Mathf.Abs(distanceX) > distanceToJump && isGrounded)
-        {
-            JumpTowardsPlayer();
-        }
+        
     }
 
     void FixedUpdate()
@@ -68,12 +64,8 @@ public class enemymove : MonoBehaviour
         rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
     }
 
-    // プレイヤーに向かってジャンプするメソッド
-    void JumpTowardsPlayer()
-    {
-        rb.AddForce(new Vector2(direction * moveSpeed, jumpForce), ForceMode2D.Impulse);
-    }
-    private bool IsGrounded()
+    
+    public bool IsGrounded()
     {
         Bounds bounds = boxCollider.bounds;
         Vector2 origin = new Vector2(bounds.center.x, bounds.min.y);
@@ -83,5 +75,10 @@ public class enemymove : MonoBehaviour
         Debug.DrawRay(origin, Vector2.down * groundCheckDistance, hit.collider ? Color.green : Color.red);
 
         return hit.collider != null;
+    }
+
+    public float GetDirection()
+    {
+        return direction;
     }
 }

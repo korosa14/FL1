@@ -51,7 +51,7 @@ public class enemyHP : MonoBehaviour
         if(other.CompareTag("wepon")&&!inv)
         {
             inv=true;
-            Debug.Log("Enemy hit: " + other.name);
+            //Debug.Log("Enemy hit: " + other.name);
             fcool=0;
             HP--;
         }
