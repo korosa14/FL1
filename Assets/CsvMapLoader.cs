@@ -4,11 +4,13 @@ using System.IO;
 
 public class CsvMapLoader : MonoBehaviour
 {
-    public Tilemap targetTilemap; // ƒ^ƒCƒ‹‚ğ”z’u‚·‚éTilemap
-    public Tile[] tilePalette;   // CSV‚Ì”’l‚É‘Î‰‚·‚éƒ^ƒCƒ‹‚Ì”z—ñ
-    public string csvFileName = ""; // ResourcesƒtƒHƒ‹ƒ_“à‚ÌCSVƒtƒ@ƒCƒ‹–¼
+    public Tilemap targetTilemap; // ï¿½^ï¿½Cï¿½ï¿½ï¿½ï¿½zï¿½uï¿½ï¿½ï¿½ï¿½Tilemap
+    public Tile[] tilePalette;   // CSVï¿½Ìï¿½ï¿½lï¿½É‘Î‰ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½ï¿½Ì”zï¿½ï¿½
+    public string csvFileName = ""; // Resourcesï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½CSVï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½
 
     public GameObject enemy1;
+
+    public int enemyNum;
 
     void Start()
     {
@@ -17,18 +19,18 @@ public class CsvMapLoader : MonoBehaviour
 
     void LoadMapFromCsv()
     {
-        // ResourcesƒtƒHƒ‹ƒ_‚©‚çCSVƒtƒ@ƒCƒ‹‚ğTextAsset‚Æ‚µ‚Ä“Ç‚İ‚Ş
+        // Resourcesï¿½tï¿½Hï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½CSVï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½TextAssetï¿½Æ‚ï¿½ï¿½Ä“Ç‚İï¿½ï¿½ï¿½
         TextAsset csvFile = Resources.Load<TextAsset>(csvFileName);
 
         if (csvFile == null)
         {
-            Debug.LogError("CSVƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñ‚Å‚µ‚½: " + csvFileName);
+            Debug.LogError("CSVï¿½tï¿½@ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Â‚ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½Å‚ï¿½ï¿½ï¿½: " + csvFileName);
             return;
         }
 
         string[] lines = csvFile.text.Split('\n');
 
-        // c•ûŒü‚Ìƒ‹[ƒvisj
+        // ï¿½cï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½vï¿½iï¿½sï¿½j
         for (int y = 0; y < lines.Length; y++)
         {
             string line = lines[y];
@@ -36,25 +38,26 @@ public class CsvMapLoader : MonoBehaviour
 
             string[] values = line.Split(',');
 
-            // ‰¡•ûŒü‚Ìƒ‹[ƒvi—ñj
+            // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½[ï¿½vï¿½iï¿½ï¿½j
             for (int x = 0; x < values.Length; x++)
             {
                 if (int.TryParse(values[x].Trim(), out int tileId))
                 {
-                    // tileId‚ªtilePalette‚Ì”ÍˆÍ“à‚É‚ ‚é‚©Šm”F
+                    // tileIdï¿½ï¿½tilePaletteï¿½Ì”ÍˆÍ“ï¿½ï¿½É‚ï¿½ï¿½é‚©ï¿½mï¿½F
                     if (tileId == 1 && tileId < tilePalette.Length)
                     {
                         Tile tileToPlace = tilePalette[tileId];
-                        // À•W‚ğŒvZ‚µATilemap‚Éƒ^ƒCƒ‹‚ğƒZƒbƒg
-                        // CSV‚Ì•À‚Ñ‚ÆUnity‚ÌÀ•WŒn‚ğ‡‚í‚¹‚é‚½‚ßyÀ•W‚ğ”½“]‚³‚¹‚é
+                        // ï¿½ï¿½ï¿½Wï¿½ï¿½ï¿½vï¿½Zï¿½ï¿½ï¿½ATilemapï¿½Éƒ^ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½g
+                        // CSVï¿½Ì•ï¿½ï¿½Ñ‚ï¿½Unityï¿½Ìï¿½ï¿½Wï¿½nï¿½ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½é‚½ï¿½ï¿½yï¿½ï¿½ï¿½Wï¿½ğ”½“]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
                         targetTilemap.SetTile(new Vector3Int(x, lines.Length - 1 - y, 0), tileToPlace);
                     }else if (tileId == 2)
                     {
                         GameObject newObject = Instantiate(enemy1, new Vector3(x, lines.Length - 1 - y, 0), Quaternion.identity);
+                        enemyNum++;
                     }
                 }
             }
         }
-        Debug.Log("CSV‚©‚ç‚Ìƒ}ƒbƒvƒ[ƒh‚ªŠ®—¹‚µ‚Ü‚µ‚½B");
+        Debug.Log("CSVï¿½ï¿½ï¿½ï¿½Ìƒ}ï¿½bï¿½vï¿½ï¿½ï¿½[ï¿½hï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ü‚ï¿½ï¿½ï¿½ï¿½B");
     }
 }

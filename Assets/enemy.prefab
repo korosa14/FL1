@@ -46,7 +46,6 @@ GameObject:
   - component: {fileID: -8127919277392088493}
   - component: {fileID: -6015119600701736216}
   - component: {fileID: 3188237377897023957}
-  - component: {fileID: -5399473356315048303}
   m_Layer: 0
   m_Name: enemy
   m_TagString: Untagged
@@ -211,16 +210,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
-  moveSpeed: 3
-  jumpForce: 15
+  moveSpeed: 1
+  jumpForce: 5
   distanceToJump: 10
   groundLayer:
     serializedVersion: 2
     m_Bits: 8
   groundCheckDistance: 0.1
-  onHitEvent:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &-6015119600701736216
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +231,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   HP: 4
   cooltime: 5
+  enemyMove: {fileID: -8127919277392088493}
 --- !u!114 &3188237377897023957
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,17 +248,3 @@ MonoBehaviour:
   damageColor: {r: 1, g: 0, b: 0, a: 1}
   duration: 0.5
   flickerInterval: 0.1
---- !u!114 &-5399473356315048303
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6875638651868196316}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6aced8103e0658644aea2df1704ac963, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemymoveScript: {fileID: -8127919277392088493}
-  enemyHPScript: {fileID: -6015119600701736216}

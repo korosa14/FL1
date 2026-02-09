@@ -8,7 +8,7 @@ public class enemymove : MonoBehaviour
     public Transform player; // プレイヤーのTransformコンポーネント
 
     [Header("移動設定")]
-    public float moveSpeed = 3f; // 移動速度
+    public float moveSpeed = 0.5f; // 移動速度
     public float jumpForce = 8f; // ジャンプ力
     public float distanceToJump = 2f; // ジャンプする距離
 
@@ -22,7 +22,11 @@ public class enemymove : MonoBehaviour
     private float direction;
     private BoxCollider2D boxCollider;
 
-    
+    private bool inv;
+
+    private bool fall;
+
+  
 
     void Start()
     {
@@ -38,6 +42,9 @@ public class enemymove : MonoBehaviour
         }
 
         boxCollider = GetComponent<BoxCollider2D>();
+
+        inv=false;
+        fall=false;
     }
 
     void Update()
@@ -52,7 +59,10 @@ public class enemymove : MonoBehaviour
         float distanceX = player.position.x - transform.position.x;
         direction = Mathf.Sign(distanceX);
 
-        
+        if(rb.transform.position.y<=-10){
+            fall=true;
+        }
+
     }
 
     void FixedUpdate()
@@ -60,12 +70,15 @@ public class enemymove : MonoBehaviour
         // 地面チェック（レイキャストを使用）
         isGrounded = IsGrounded();
 
-        // プレイヤーの方向へ移動
+        if(!inv){
+             // プレイヤーの方向へ移動
         rb.linearVelocity = new Vector2(direction * moveSpeed, rb.linearVelocity.y);
+        }
+       
     }
 
-    
-    public bool IsGrounded()
+    // プレイヤーに向かってジャンプするメソッド
+    private bool IsGrounded()
     {
         Bounds bounds = boxCollider.bounds;
         Vector2 origin = new Vector2(bounds.center.x, bounds.min.y);
@@ -77,8 +90,26 @@ public class enemymove : MonoBehaviour
         return hit.collider != null;
     }
 
-    public float GetDirection()
-    {
-        return direction;
+    public void SetInv(bool flag){
+        inv=flag;
     }
+    public bool GetInv(){
+        return inv;
+    }
+     // 攻撃を食らった時に外部から呼ぶメソッド
+    public void PlayKnockback(float power)
+    {
+        // 1. 敵の場所から自分の場所への方向を計算
+        Vector2 knockbackDir = ((Vector2)transform.position - new Vector2(player.transform.position.x,player.transform.position.y)).normalized;
+
+        // 2. 現在の速度を一度ゼロにする（連続ヒット時の不自然な挙動を防ぐ）
+        rb.linearVelocity = Vector2.zero;
+
+        // 3. 反対方向へ力を加える (Impulseは瞬間的な力)
+        rb.AddForce(knockbackDir * power, ForceMode2D.Impulse);
+    }
+    public bool Getfall(){
+        return fall;
+    }
+
 }
